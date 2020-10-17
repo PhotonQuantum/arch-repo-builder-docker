@@ -4,21 +4,30 @@ set -euo pipefail
 AURVCS=${AURVCS:-.*-(cvs|svn|git|hg|bzr|darcs)$}
 
 # let custom_pkgs: List[string]
+mkdir -p $BUILD_DIR/custom
 pushd $BUILD_DIR/custom
-readarray -t _custom_pkgs <<< $(ls -d */)
-custom_pkgs=$(echo "${_custom_pkgs[@]%/}")
+set +e
+ls -d */
+[ $? == 0 ] && has_custom_pkgs=true || has_custom_pkgs=false
+set -e
+if $has_custom_pkgs; then
+    readarray -t _custom_pkgs <<< $(ls -d */)
+    custom_pkgs=$(echo "${_custom_pkgs[@]%/}")
+fi
 popd
 
 # build custom packages
-echo "[+] Building custom packages"
-for custom_package in "${custom_pkgs[@]}"; do
-    echo "[-] Building ${custom_package}"
-    pushd $BUILD_DIR/custom/${custom_package}
-    set +e
-    aur build -- --noconfirm -cs
-    set -e
-    popd
-done
+if $has_custom_pkgs; then
+    echo "[+] Building custom packages"
+    for custom_package in "${custom_pkgs[@]}"; do
+        echo "[-] Building ${custom_package}"
+        pushd $BUILD_DIR/custom/${custom_package}
+        set +e
+        aur build -- --noconfirm -cs
+        set -e
+        popd
+    done
+fi
 
 # sync packages
 echo "[+] Building normal packages"
@@ -27,7 +36,11 @@ for package in "${packages[@]}"; do
     if [[ ! "${custom_pkgs[@]}" =~ "${package}" ]]; then
         echo "[-] Building ${package}"
         set +e
-        aur sync -n "${package}" --noview --ignore ${custom_pkgs[@]}
+        if $has_custom_pkgs; then
+            aur sync -n "${package}" --noview --ignore ${custom_pkgs[@]}
+        else
+            aur sync -n "${package}" --noview
+        fi
         set -e
     fi
 done
@@ -38,7 +51,11 @@ for vcs_package in "${vcs_packages[@]}"; do
     if [[ ! "${custom_pkgs[@]}" =~ "${vcs_package}" ]]; then
         echo "[-] Building ${vcs_package}"
         set +e
-        aur sync -n "${vcs_package}" --no-ver --noview --ignore ${custom_pkgs[@]}
+        if $has_custom_pkgs; then
+            aur sync -n "${vcs_package}" --no-ver --noview --ignore ${custom_pkgs[@]}
+        else
+            aur sync -n "${vcs_package}" --no-ver --noview
+        fi
         set -e
     fi
 done
