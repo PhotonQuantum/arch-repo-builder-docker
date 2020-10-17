@@ -50,3 +50,8 @@ set +e
 rsync -rLtP --delete $BUILD_DIR/ $TARGET_DIR/
 set -e
 sync
+
+# fix mime
+sudo pacman -S python-pip
+sudo pip install oss2
+python ./fix-mime.py
