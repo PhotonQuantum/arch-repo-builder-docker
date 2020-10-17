@@ -4,7 +4,7 @@ set -euo pipefail
 AURVCS=${AURVCS:-.*-(cvs|svn|git|hg|bzr|darcs)$}
 
 # let custom_pkgs: List[string]
-pushd build-dir/custom
+pushd $BUILD_DIR/custom
 readarray -t _custom_pkgs <<< $(ls -d */)
 custom_pkgs=$(echo "${_custom_pkgs[@]%/}")
 popd
@@ -13,7 +13,7 @@ popd
 echo "[+] Building custom packages"
 for custom_package in "${custom_pkgs[@]}"; do
     echo "[-] Building ${custom_package}"
-    pushd build-dir/custom/${custom_package}
+    pushd $BUILD_DIR/custom/${custom_package}
     set +e
     aur build -- --noconfirm -cs
     set -e
@@ -44,4 +44,4 @@ for vcs_package in "${vcs_packages[@]}"; do
 done
 
 # remove old packages
-paccache -dk 1 -c build-dir/
+paccache -dk 1 -c $BUILD_DIR/
