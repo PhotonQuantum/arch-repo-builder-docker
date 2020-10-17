@@ -17,7 +17,7 @@ popd
 # prepare repo
 mkdir $BUILD_DIR
 set +e
-rsync -rlP --delete $TARGET_DIR/ $BUILD_DIR/
+rsync -rltP --delete $TARGET_DIR/ $BUILD_DIR/
 set -e
 rm $BUILD_DIR/$REPO.db $BUILD_DIR/$REPO.files
 ln -s $(pwd)/$BUILD_DIR/$REPO.db.tar.zst $(pwd)/$BUILD_DIR/$REPO.db
@@ -44,6 +44,6 @@ date +"%s" > $BUILD_DIR/lastupdate
 
 # sync back to remote
 set +e
-rsync -rLP --delete $BUILD_DIR/ $TARGET_DIR/
+rsync -rLtP --delete $BUILD_DIR/ $TARGET_DIR/
 set -e
 sync
