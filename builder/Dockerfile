@@ -4,9 +4,15 @@ COPY mirrorlist /etc/pacman.d/mirrorlist
 
 COPY makepkg.conf /etc/makepkg.conf
 
+COPY pacman.conf /etc/pacman.conf
+
 RUN pacman -Syu --noconfirm
 
-RUN pacman -S pacman-contrib base-devel git rsync fuse mime-types --needed --noconfirm
+RUN pacman -S archlinuxcn-keyring --noconfirm
+
+RUN pacman -S powerpill --noconfirm
+
+RUN powerpill -S pacman-contrib base-devel git rsync fuse mime-types --needed --noconfirm
 
 RUN paccache -r -k 0
 
