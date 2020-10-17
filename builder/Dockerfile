@@ -28,7 +28,7 @@ RUN echo "build ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 WORKDIR /build
 
-COPY run.sh build.sh arch-db-meta-rs ./
+COPY run.sh build.sh arch-db-meta-rs fix-mime.py ./
 
 USER build
 

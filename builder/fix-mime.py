@@ -12,7 +12,9 @@ def main():
             mime, _ = mimetypes.guess_type(obj.key)
             if mime:
                 print(f"{obj.key} - {mime}")
-                bucket.update_object_meta(obj.key, {"Content-Type": mime})
+                meta = bucket.head_object(obj.key).headers
+                meta = {k:v for k, v in meta.items() if k.startswith("x-oss-meta")}
+                meta["Content-Type"] = mime
+                bucket.update_object_meta(obj.key, meta)
 
-if __name__ == "__main__":
-    main()
+main()
