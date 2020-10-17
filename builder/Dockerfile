@@ -8,6 +8,12 @@ COPY pacman.conf /etc/pacman.conf
 
 RUN pacman -Syu --noconfirm
 
+RUN rm -rf /etc/pacman.d/gnupg
+
+RUN pacman-key --init
+
+RUN pacman-key --populate archlinux
+
 RUN pacman -S archlinuxcn-keyring --noconfirm
 
 RUN pacman -S powerpill --noconfirm
