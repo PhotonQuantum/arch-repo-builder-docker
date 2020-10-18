@@ -43,7 +43,7 @@ set -e
 
 # update meta data
 ./arch-db-meta-rs $BUILD_DIR/$REPO.db $BUILD_DIR/meta.json
-date +"%s" > $BUILD_DIR/lastupdate
+echo $CURRENT_TIME > $BUILD_DIR/lastupdate
 
 # sync back to remote
 set +e
