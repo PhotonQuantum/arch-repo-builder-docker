@@ -25,7 +25,7 @@ if $has_custom_pkgs; then
         echo "[-] Building ${custom_package}"
         pushd $BUILD_DIR/custom/${custom_package}
         set +e
-        aur build -- --noconfirm -cs
+        aur build -f -- --noconfirm -cs
         [ $? -ne 0 ] && failed_pkgs+=($custom_package)
         set -e
         popd
@@ -56,9 +56,9 @@ for vcs_package in "${vcs_packages[@]}"; do
         echo "[-] Building ${vcs_package}"
         set +e
         if $has_custom_pkgs; then
-            aur sync -n "${vcs_package}" --no-ver --noview --ignore ${custom_pkgs[@]}
+            aur sync -f -n "${vcs_package}" --no-ver --noview --ignore ${custom_pkgs[@]}
         else
-            aur sync -n "${vcs_package}" --no-ver --noview
+            aur sync -f -n "${vcs_package}" --no-ver --noview
         fi
         [ $? -ne 0 ] && failed_pkgs+=($vcs_package)
         set -e
