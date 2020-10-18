@@ -39,6 +39,7 @@ CURRENT_TIME=$(date +"%s")
 mkdir -p $BUILD_DIR/log
 set +e
 ./build.sh 2>&1 | tee $BUILD_DIR/log/build.$CURRENT_TIME.log 
+cp failed_pkgs.log $BUILD_DIR/log/failed.$CURRENT_TIME.log
 set -e
 
 # update meta data

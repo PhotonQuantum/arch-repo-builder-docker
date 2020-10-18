@@ -16,6 +16,8 @@ if $has_custom_pkgs; then
 fi
 popd
 
+failed_pkgs=()
+
 # build custom packages
 if $has_custom_pkgs; then
     echo "[+] Building custom packages"
@@ -24,6 +26,7 @@ if $has_custom_pkgs; then
         pushd $BUILD_DIR/custom/${custom_package}
         set +e
         aur build -f -- --noconfirm -cs
+        [ $? -ne 0 ] && failed_pkgs+=($custom_package)
         set -e
         popd
     done
@@ -41,6 +44,7 @@ for package in "${packages[@]}"; do
         else
             aur sync -n "${package}" --noview
         fi
+        [ $? -ne 0 ] && failed_pkgs+=($package)
         set -e
     fi
 done
@@ -56,9 +60,12 @@ for vcs_package in "${vcs_packages[@]}"; do
         else
             aur sync -f -n "${vcs_package}" --no-ver --noview
         fi
+        [ $? -ne 0 ] && failed_pkgs+=($vcs_package)
         set -e
     fi
 done
 
 # remove old packages
 paccache -dk 1 -c $BUILD_DIR/
+
+echo "${failed_pkgs[@]}" > failed_pkgs.log
