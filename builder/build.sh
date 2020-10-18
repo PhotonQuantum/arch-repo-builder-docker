@@ -66,6 +66,6 @@ for vcs_package in "${vcs_packages[@]}"; do
 done
 
 # remove old packages
-paccache -dk 1 -c $BUILD_DIR/
+paccache -rk 3 -c $BUILD_DIR/
 
 echo "${failed_pkgs[@]}" > failed_pkgs.log
