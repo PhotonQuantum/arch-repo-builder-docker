@@ -41,7 +41,7 @@ else
     set -e
     if $has_custom_pkgs; then
         readarray -t _custom_pkgs <<< $(ls -d */)
-        custom_pkgs=$(echo "${_custom_pkgs[@]%/}")
+        read -ra custom_pkgs <<< ${_custom_pkgs[@]%/}
     fi
     popd
 
