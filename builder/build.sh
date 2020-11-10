@@ -3,6 +3,15 @@ set -euo pipefail
 
 AURVCS=${AURVCS:-.*-(cvs|svn|git|hg|bzr|darcs)$}
 
+if [ -f "$BUILD_DIR/prebuild.sh" ]; then
+    echo "[!] Running prebuild script"
+    set +e
+    pushd $BUILD_DIR
+    ./prebuild.sh
+    popd
+    set -e
+fi
+
 if [ -f "$BUILD_DIR/oneshot" ]; then
     echo "[!] Running oneshot build task"
     add_pkgs=()
