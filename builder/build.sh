@@ -72,7 +72,7 @@ else
 
     # sync packages
     echo "[+] Building normal packages"
-    packages=$(aur repo $REPO --list --status-file=db|aur vercmp --quiet)
+    read -ra packages <<< $(aur repo $REPO --list --status-file=db|aur vercmp --quiet)
     for package in "${packages[@]}"; do
         if [[ ! "${custom_pkgs[@]}" =~ "${package}" ]]; then
             echo "[-] Building ${package}"
