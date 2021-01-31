@@ -63,7 +63,7 @@ else
             echo "[-] Building ${custom_package}"
             pushd $BUILD_DIR/custom/${custom_package}
             set +e
-            aur build -f -- --noconfirm -cs
+            aur build -f --margs --noconfirm,-cs
             [ $? -ne 0 ] && failed_pkgs+=($custom_package)
             set -e
             popd
