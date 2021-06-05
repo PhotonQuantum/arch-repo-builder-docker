@@ -6,10 +6,8 @@ export BUILD_DIR=build-dir
 export AUR_REPO=$REPO
 export AUR_DBROOT=$(pwd)/$BUILD_DIR/
 
-export PACMAN=powerpill
-
-sudo powerpill -S archlinuxcn-keyring archlinux-keyring --noconfirm --needed
-sudo powerpill -Syu --noconfirm
+sudo pacman -S archlinuxcn-keyring archlinux-keyring --noconfirm --needed
+sudo pacman -Syu --noconfirm
 
 git clone https://aur.archlinux.org/aurutils.git
 
@@ -32,7 +30,7 @@ Server = file://$(pwd)/$BUILD_DIR/
 END
 )
 echo "$REPO_CONF" | sudo tee -a /etc/pacman.conf > /dev/null
-sudo powerpill -Syu
+sudo pacman -Syu
 
 # build packages
 CURRENT_TIME=$(date +"%s")
