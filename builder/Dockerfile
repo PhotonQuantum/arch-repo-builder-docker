@@ -16,9 +16,7 @@ RUN pacman-key --populate archlinux
 
 RUN pacman -S archlinuxcn-keyring --noconfirm
 
-RUN pacman -S powerpill --noconfirm
-
-RUN powerpill -S pacman-contrib base-devel git rsync fuse mime-types --needed --noconfirm
+RUN pacman -S pacman-contrib base-devel git rsync fuse mime-types --needed --noconfirm
 
 RUN paccache -r -k 0
 
